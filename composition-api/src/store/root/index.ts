@@ -1,23 +1,19 @@
 import { createStore, StoreOptions } from 'vuex'
 
-import {
-  RootStateInterface,
-  RootStoreInterface,
-  RootStoreModel,
-  StoreModuleNames,
-  MutationType
-} from '@/models/store'
+import { RootStateInterface, RootStoreModel } from '@/models/store'
 
 import { initialRootState } from './initialState'
 
-import { LocalStorageKeys } from '@/models/local-storage/LocalStorageKeys'
-
-// GEN-IMPORTS
 // import each Vuex module
-import { itemsState } from '@/store/items'
-import { localesState } from '@/store/locales'
+// GEN-IMPORTS-STATE
+import { itemsState } from '@/store/items/module'
+import { localesState } from '@/store/locales/module'
 
-// Vuex store options to build our modularized namespaced store
+/**
+ * @name storeOptions
+ * @description
+ * Vuex store options to build our modularized namespaced store
+ */
 const storeOptions: StoreOptions<RootStateInterface> = {
   state: initialRootState,
 
@@ -30,16 +26,18 @@ const storeOptions: StoreOptions<RootStateInterface> = {
 }
 
 // Vuex Root store instance
-export const store: RootStoreModel<RootStateInterface> = <any>createStore(storeOptions)
+export const rootStore: RootStoreModel<RootStateInterface> = <any>createStore(storeOptions)
 
-// for the current locale,
-// try using the last user's preferred locale
-// if available from localStorage
-const userPreferredLocaleId: string = localStorage.getItem(LocalStorageKeys.locale) || ''
-if (userPreferredLocaleId.length > 0) {
-  // change locale selected
-  store.dispatch(
-    `${StoreModuleNames.localesState}/${MutationType.locales.selectLocale}`,
-    userPreferredLocaleId
-  )
+/**
+ * @name dispatchModuleAction
+ * @description
+ * Private helper to dispatch an action to a Vuex module from one place
+ * So we keep the string interpolation for `${moduleName}/${actionName}` in one place only
+ * and be able to dispatch action with less code in a strongly-type way
+ * @param moduleName
+ * @param actionName
+ * @param params
+ */
+export function dispatchModuleAction<T>(moduleName: string, actionName: string, params?: T): void {
+  rootStore.dispatch(`${moduleName}/${actionName}`, params)
 }

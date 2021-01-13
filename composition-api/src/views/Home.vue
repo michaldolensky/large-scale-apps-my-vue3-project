@@ -6,30 +6,31 @@
 
 <script lang="ts">
   import { defineComponent, computed, onMounted } from 'vue'
-  import { store } from '@/store'
+  import { useItemsStore } from '@/store/items'
   import { MutationType, StoreModuleNames } from '@/models/store'
   import ItemsListComponent from '@/components/items/ItemsList.component.vue'
   import { ItemInterface } from '@/models/items/Item.interface'
 
-  const HomeView = {
+  export default defineComponent({
     name: 'Home',
     components: {
       ItemsListComponent
     },
     setup() {
+      const itemsStore = useItemsStore()
       const items = computed(() => {
-        return store.state.itemsState.items
+        return itemsStore.state.items
       })
       const loading = computed(() => {
-        return store.state.itemsState.loading
+        return itemsStore.state.loading
       })
 
       onMounted(() => {
-        store.dispatch(`${StoreModuleNames.itemsState}/${MutationType.items.loadItems}`)
+        itemsStore.action(MutationType.items.loadItems)
       })
 
       const onSelectItem = (item: ItemInterface) => {
-        store.dispatch(`${StoreModuleNames.itemsState}/${MutationType.items.selectItem}`, {
+        itemsStore.action(MutationType.items.selectItem, {
           id: item.id,
           selected: !item.selected
         })
@@ -41,7 +42,5 @@
         onSelectItem
       }
     }
-  }
-
-  export default defineComponent(HomeView)
+  })
 </script>

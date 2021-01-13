@@ -1,43 +1,31 @@
-import { Module, MutationTree, ActionTree, GetterTree } from 'vuex'
-
-import { MutationType, RootStateInterface, LocalesStateInterface } from '@/models/store'
-
-import { initialLocalesState } from './initialState'
-
-import { LocaleInfoInterface } from '@/models/localization/LocaleInfo.interface'
-import { i18n } from '@/plugins/vue-i18n-next-plugin'
+import { rootStore, dispatchModuleAction } from '../root'
+import { MutationType, StoreModuleNames, LocalesStateInterface } from '@/models/store'
 import { LocalStorageKeys } from '@/models/local-storage/LocalStorageKeys'
 
-export const mutations: MutationTree<LocalesStateInterface> = {
-  selectLocale(state: LocalesStateInterface, localeId: string) {
-    // set only the model selected to true
-    state.availableLocales.forEach(localeInfo => {
-      localeInfo.selected = localeInfo.locale === localeId
-      if (localeInfo.selected) {
-        // switch i18n selected locale
-        i18n.global.locale.value = localeInfo.locale
-        // save the user preference also to localStorage
-        localStorage.setItem(LocalStorageKeys.locale, localeInfo.locale)
-      }
-    })
+/**
+ * @name localesStore
+ * @description
+ * The locales store wrapper that returns the localesState and exposes a generic action<T> method
+ */
+const localesStore = {
+  get state(): LocalesStateInterface {
+    return rootStore.state.localesState
+  },
+  action<T>(actionName: string, params?: T): void {
+    dispatchModuleAction(StoreModuleNames.localesState, actionName, params)
   }
 }
 
-export const actions: ActionTree<LocalesStateInterface, RootStateInterface> = {
-  selectLocale({ commit }, localeId: string) {
-    commit(MutationType.locales.selectLocale, localeId)
-  }
+// export our wrappers using the composition API convention (i.e. useXYZ)
+export const useLocalesStore = () => {
+  return localesStore
 }
 
-export const getters: GetterTree<LocalesStateInterface, RootStateInterface> = {}
-
-const namespaced: boolean = true
-const state: LocalesStateInterface = initialLocalesState
-
-export const localesState: Module<LocalesStateInterface, RootStateInterface> = {
-  namespaced,
-  state,
-  getters,
-  actions,
-  mutations
+// for the current locale,
+// try using the last user's preferred locale
+// if available from localStorage
+const userPreferredLocaleId: string = localStorage.getItem(LocalStorageKeys.locale) || ''
+if (userPreferredLocaleId.length > 0) {
+  // change locale selected
+  localesStore.action(MutationType.locales.selectLocale, userPreferredLocaleId)
 }
