@@ -46,7 +46,9 @@
     "welcome": "Benvenuti: this message is localized in Italian",
     "navigation": {
       "home": "Home",
-      "about": "Chi Siamo"
+      "about": "Chi Siamo",
+      "primitives": "Primitivi",
+      "widgetsPlayground": "Widgets Playground"
     },
     "items": {
       "list": {

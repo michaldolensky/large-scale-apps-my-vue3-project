@@ -1,45 +1,51 @@
 {
   "name": "my-vue3-project",
-  "description": "Companion code for the book \"Large Scale Apps with Vue 2 and TypeScript\" by Damiano Fusco",
   "version": "1.0.0",
+  "description": "Companion code for the book \"Large Scale Apps with Vue 2 and TypeScript\" by Damiano Fusco",
   "author": "Damiano Fusco",
-  "license": "MIT",
   "scripts": {
     "serve": "cross-env VUE_APP_CONFIG=mock vue-cli-service serve --mode development",
     "build": "cross-env VUE_APP_CONFIG=live vue-cli-service build --mode production",
+    "lint": "prettier --write '**/*.{ts,vue}'",
     "build-mock": "cross-env VUE_APP_CONFIG=mock vue-cli-service build --mode production",
-    "test-mock": "cross-env VUE_APP_CONFIG=mock vue-cli-service test:unit",
-    "test-local": "cross-env VUE_APP_CONFIG=local vue-cli-service test:unit",
+    "test-all": "npm run test-mock && npm run test-local && npm run test-beta && npm run test-live",
     "test-beta": "cross-env VUE_APP_CONFIG=beta vue-cli-service test:unit",
     "test-live": "cross-env VUE_APP_CONFIG=live vue-cli-service test:unit",
-    "test-all": "npm run test-mock && npm run test-local && npm run test-beta && npm run test-live",
-    "lint": "prettier --write '**/*.{ts,vue}'"
+    "test-local": "cross-env VUE_APP_CONFIG=local vue-cli-service test:unit",
+    "test-mock": "cross-env VUE_APP_CONFIG=mock vue-cli-service test:unit"
   },
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "my-component-library": "file:../my-component-library-0.1.0.tgz",
-    "vue": "^3.0.0-0",
-    "vue-i18n": "^9.0.0-beta.8",
-    "vue-loader-v16": "npm:vue-loader@16.0.0-beta.7",
-    "vue-router": "^4.0.0-0",
-    "vuex": "^4.0.0-0"
+    "vue-i18n": "^9.0.0-rc.4",
+    "vue-loader": "^16.1.2",
+    "vue": "^3.0.5",
+    "vue-router": "^4.0.3",
+    "vuex": "^4.0.0"
   },
   "devDependencies": {
     "@types/chai": "^4.2.11",
-    "@types/mocha": "^5.2.4",
+    "@types/mocha": "^8.0.4",
     "@types/sinon": "^9.0.4",
-    "@vue/cli-plugin-router": "~4.5.4",
-    "@vue/cli-plugin-typescript": "~4.5.4",
-    "@vue/cli-plugin-unit-mocha": "~4.5.4",
-    "@vue/cli-plugin-vuex": "~4.5.4",
-    "@vue/cli-service": "~4.5.4",
-    "@vue/compiler-sfc": "^3.0.0-0",
+    "@vue/cli-plugin-router": "~5.0.0-alpha.4",
+    "@vue/cli-plugin-typescript": "~5.0.0-alpha.4",
+    "@vue/cli-plugin-unit-mocha": "~5.0.0-alpha.4",
+    "@vue/cli-plugin-vuex": "~5.0.0-alpha.4",
+    "@vue/cli-plugin-webpack-4": "^5.0.0-alpha.4",
+    "@vue/cli-service": "~5.0.0-alpha.4",
+    "@vue/compiler-sfc": "^3.0.4",
     "@vue/test-utils": "^2.0.0-0",
-    "chai": "^4.1.2",
-    "cross-env": "^7.0.2",
-    "node-sass": "^4.12.0",
-    "sass-loader": "^8.0.2",
+    "chai": "^4.2.0",
+    "sass": "^1.32.5",
+    "sass-loader": "^10.1.1",
+    "typescript": "~4.1.2",
+    "webpack": "^4.0.0",
+    "cross-env": "^7.0.3",
     "sinon": "^9.0.3",
-    "typescript": "~3.9.3"
+    "vue-cli-plugin-tailwind": "~2.0.1"
+  },
+  "resolutions": {
+    "@vue/cli-*/webpack": "^4.0.0",
+    "html-webpack-plugin": "^4.5.1"
   }
 }
